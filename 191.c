@@ -1,0 +1,18 @@
+#include <stdio.h>
+int hammingWeight(int n) {
+  int result = 0;
+
+  for (int i = 0; i < 32; i++) {
+    if (((n >> i) & 1) == 1) {
+      result += 1;
+    }
+  }
+
+  return result;
+}
+
+int main() {
+  printf("%d\n", hammingWeight(3));
+
+  return 0;
+}
