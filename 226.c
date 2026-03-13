@@ -7,31 +7,37 @@ struct TreeNode {
   struct TreeNode *right;
 };
 
-struct TreeNode *invertTree(struct TreeNode *root) {
-  struct TreeNode *toLookup[50];
-  toLookup[0] = root;
-  int top = 1;
-  int bottom = 0;
-  while (bottom < top) {
-    if (toLookup[bottom % 50]) {
-      if (toLookup[bottom % 50]->left) {
-        toLookup[top % 50] = toLookup[bottom % 50]->left;
-        top++;
-      }
-      if (toLookup[bottom % 50]->right) {
-        toLookup[top % 50] = toLookup[bottom % 50]->right;
-        top++;
-      }
-      struct TreeNode *tmp = toLookup[bottom % 50]->right;
-      toLookup[bottom % 50]->right = toLookup[bottom % 50]->left;
-      toLookup[bottom % 50]->left = tmp;
-      bottom++;
-    } else {
-      break;
-    }
-  }
+struct TreeNode* invertTree(struct TreeNode* root) {
+  if (root == NULL) return NULL;
+
+  struct TreeNode* tmp = root->left;
+  root->left = root->right;
+  root->right = tmp;
+
+  invertTree(root->left);
+  invertTree(root->right);
 
   return root;
 }
 
-int main() { return 0; }
+struct TreeNode* createTreeNode(int val) {
+  struct TreeNode* node = malloc(sizeof(struct TreeNode));
+
+  node->val = val;
+  node->left = NULL;
+  node->right = NULL;
+
+  return node;
+}
+
+int main() {
+  struct TreeNode* root = createTreeNode(4);
+  root->left = createTreeNode(5);
+  root->left->left = createTreeNode(6);
+
+  invertTree(root);
+
+  printf("%d %d %d\n", root->val, root->right->val, root->right->right->val);
+
+  return 0; 
+}
